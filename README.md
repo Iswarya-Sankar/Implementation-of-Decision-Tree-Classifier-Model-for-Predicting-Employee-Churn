@@ -36,79 +36,94 @@ Program to implement the Decision Tree Classifier Model for Predicting Employee 
 Developed by: Iswarya S 
 RegisterNumber: 212225040135
 */
+<img width="486" height="262" alt="Screenshot 2026-05-19 143740" src="https://github.com/user-attachments/assets/71daa8e4-47bb-4d44-bed8-dc4c8b30ae3c" />
 
-# Implementation of Decision Tree Classifier Model
-# for Predicting Employee Churn
-
+#import required libraries
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn import tree
 import matplotlib.pyplot as plt
 
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-from sklearn import tree
+# Load dataset
+data = pd.read_csv("Employee.csv")
 
-# Dataset
-data = {
-    'Age': [25, 30, 45, 35, 40, 23, 50, 28, 32, 48],
-    'Salary': [30000, 40000, 80000, 50000, 65000, 28000, 90000, 35000, 45000, 85000],
-    'YearsAtCompany': [1, 3, 10, 5, 7, 1, 15, 2, 4, 12],
-    'Churn': [1, 0, 0, 1, 0, 1, 0, 1, 1, 0]
-}
+# Display first 5 rows
+print("First 5 Rows of Dataset:")
+print(data.head())
 
-df = pd.DataFrame(data)
+# Display dataset information
+print("\nDataset Information:")
+print(data.info())
 
-# Features and Target
-X = df[['Age', 'Salary', 'YearsAtCompany']]
-y = df['Churn']
+# Convert categorical columns into numerical values
+label_encoder = LabelEncoder()
 
-# Split Data
+for column in data.columns:
+    if data[column].dtype == 'object':
+        data[column] = label_encoder.fit_transform(data[column])
+
+# Define features and target variable
+# 'left' is the target column (Employee Churn)
+X = data.drop("left", axis=1)
+y = data["left"]
+
+# Split dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
 )
 
-# Create Model
-model = DecisionTreeClassifier(max_depth=3)
+# Create Decision Tree Classifier model
+model = DecisionTreeClassifier(
+    criterion='entropy',   # You can also use 'gini'
+    max_depth=5,
+    random_state=42
+)
 
-# Train Model
+# Train the model
 model.fit(X_train, y_train)
 
-# Prediction
+# Predict using test data
 y_pred = model.predict(X_test)
 
-# Evaluation
-print("Predicted Values:")
-print(y_pred)
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
 
-print("\nAccuracy:")
-print(accuracy_score(y_test, y_pred))
+print("\nAccuracy of Decision Tree Classifier:")
+print(accuracy)
 
+# Display confusion matrix
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 
+# Display classification report
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
 
 # Plot Decision Tree
-plt.figure(figsize=(18, 10))
+plt.figure(figsize=(20,10))
 
 tree.plot_tree(
     model,
-    feature_names=['Age', 'Salary', 'YearsAtCompany'],
-    class_names=['Stayed', 'Left'],
-    filled=True,
-    rounded=True,
-    fontsize=14
+    feature_names=X.columns,
+    class_names=["Stayed", "Left"],
+    filled=True
 )
 
-plt.title("Decision Tree for Employee Churn Prediction", fontsize=20)
+plt.title("Decision Tree for Employee Churn Prediction")
 plt.show()
+
 ```
 
 ## Output:
-<img width="505" height="317" alt="Screenshot 2026-05-18 091127" src="https://github.com/user-attachments/assets/c1afef4a-df73-4363-9288-83f8ca1ca5d8" />
-<img width="740" height="550" alt="image" src="https://github.com/user-attachments/assets/b814b7f3-5d69-4b54-a46e-e48940ce6aca" />
-
+<img width="554" height="657" alt="Screenshot 2026-05-19 143730" src="https://github.com/user-attachments/assets/1775b595-e570-4126-9346-13951a7b95e8" />
+<img width="486" height="262" alt="Screenshot 2026-05-19 143740" src="https://github.com/user-attachments/assets/011efac5-8ca5-4cdb-8cc8-419aebf9d00e" />
+<img width="1074" height="518" alt="Screenshot 2026-05-19 143807" src="https://github.com/user-attachments/assets/642f59ac-e1e4-49d4-a50a-51ff76d9bf4d" />
 
 
 ## Result:
