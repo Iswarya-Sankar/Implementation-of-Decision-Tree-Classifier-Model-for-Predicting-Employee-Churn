@@ -36,7 +36,6 @@ Program to implement the Decision Tree Classifier Model for Predicting Employee 
 Developed by: Iswarya S 
 RegisterNumber: 212225040135
 */
-<img width="486" height="262" alt="Screenshot 2026-05-19 143740" src="https://github.com/user-attachments/assets/71daa8e4-47bb-4d44-bed8-dc4c8b30ae3c" />
 
 #import required libraries
 import pandas as pd
